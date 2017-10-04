@@ -60,10 +60,10 @@ lazy val commonSettings = Seq(
 
 lazy val fortifySettings = Seq(
   libraryDependencies += compilerPlugin(
-    "com.lightbend" %% "scala-fortify" % "521d8373" classifier "assembly"
+    "com.lightbend" %% "scala-fortify" % "82a966b3" classifier "assembly"
       exclude("com.typesafe.conductr", "ent-suite-licenses-parser")
       exclude("default", "scala-st-nodes")),
-  scalacOptions += s"-P:fortify:out=${target.value}")
+  scalacOptions += s"-P:fortify:build=better-files")
 
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
