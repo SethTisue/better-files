@@ -63,7 +63,7 @@ lazy val fortifySettings = Seq(
     "com.lightbend" %% "scala-fortify" % "82a966b3" classifier "assembly"
       exclude("com.typesafe.conductr", "ent-suite-licenses-parser")
       exclude("default", "scala-st-nodes")),
-  scalacOptions += s"-P:fortify:build=better-files")
+  scalacOptions += s"-P:fortify:build=better-files-${thisProject.value.id}")
 
 lazy val core = (project in file("core"))
   .settings(commonSettings: _*)
