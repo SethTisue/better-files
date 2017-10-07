@@ -59,8 +59,14 @@ lazy val commonSettings = Seq(
   ) ++ fortifySettings
 
 lazy val fortifySettings = Seq(
+  credentials += Credentials(
+    Path.userHome / ".lightbend" / "commercial.credentials"),
+  resolvers += Resolver.url(
+    "lightbend-commercial-releases",
+    new URL("http://repo.lightbend.com/commercial-releases/"))(
+    Resolver.ivyStylePatterns),
   libraryDependencies += compilerPlugin(
-    "com.lightbend" %% "scala-fortify" % "39c9faa2" classifier "assembly"),
+    "com.lightbend" %% "scala-fortify" % "bbc8c182" classifier "assembly"),
   scalacOptions += s"-P:fortify:build=better-files")
 
 lazy val core = (project in file("core"))
