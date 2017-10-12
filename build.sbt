@@ -66,7 +66,7 @@ lazy val fortifySettings = Seq(
     new URL("http://repo.lightbend.com/commercial-releases/"))(
     Resolver.ivyStylePatterns),
   libraryDependencies += compilerPlugin(
-    "com.lightbend" %% "scala-fortify" % "bbc8c182" classifier "assembly"),
+    "com.lightbend" %% "scala-fortify" % "505d2103" classifier "assembly"),
   scalacOptions += s"-P:fortify:build=better-files")
 
 lazy val core = (project in file("core"))
