@@ -40,7 +40,7 @@ To use the [Akka based file monitor](akka), also add this:
 ```scala
 libraryDependencies ++= Seq(  
   "com.github.pathikrit"  %% "better-files-akka"  % version,
-  "com.typesafe.akka"     %% "akka-actor"         % "2.5.4"
+  "com.typesafe.akka"     %% "akka-actor"         % "2.5.6"
 )
 ```
 Latest `version`: [![Maven][mavenImg]][mavenLink] [![Scaladex][scaladexImg]][scaladexLink]
@@ -265,6 +265,7 @@ val printer : PrintWriter           = outputstream.printWriter
 val br      : BufferedReader        = reader.buffered
 val bw      : BufferedWriter        = writer.buffered
 val mm      : MappedByteBuffer      = fileChannel.toMappedByteBuffer
+val str     : String                = inputstream.asString  //Read a string from an InputStream
 ```
 `better-files` also supports [certain conversions that are not supported out of the box by the JDK](https://stackoverflow.com/questions/62241/how-to-convert-a-reader-to-inputstream-and-a-writer-to-outputstream)
 
@@ -571,6 +572,17 @@ case class Person(id: Int, name: String, isMale: Boolean)
 val out2 = Seq.fill(3)(in.next[Person])
 ```
 
+Simple CSV reader:
+```scala
+val file = """
+  23,foo
+  42,bar
+"""
+val csvScanner = file.newScanner(StringSpliiter.on(','))
+csvScanner.next[Int]    //23
+csvScanner.next[String] //foo
+```
+
 ### File Monitoring
 Vanilla Java watchers:
 ```scala
@@ -597,7 +609,7 @@ Sometimes, instead of overwriting each of the 3 methods above, it is more conven
 import java.nio.file.{Path, StandardWatchEventKinds => EventType, WatchEvent}
 
 val watcher = new FileMonitor(myDir, recursive = true) {
-  override def dispatch(eventType: WatchEvent.Kind[Path], file: File, count: Int) = eventType match {
+  override def onEvent(eventType: WatchEvent.Kind[Path], file: File, count: Int) = eventType match {
     case EventType.ENTRY_CREATE => println(s"$file got created")
     case EventType.ENTRY_MODIFY => println(s"$file got modified $count")
     case EventType.ENTRY_DELETE => println(s"$file got deleted")

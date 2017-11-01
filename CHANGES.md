@@ -17,12 +17,16 @@ better-files follows the following `MAJOR.MINOR.PATCH` release conventions:
 * [Issue #129](https://github.com/pathikrit/better-files/issues/129): JSR-203 and JimFS compatibility
 * [Issue #88](https://github.com/pathikrit/better-files/issues/88): Strongly typed relative and absolute path APIs
 * [Issue #122](https://github.com/pathikrit/better-files/issues/122): Scala Platform Release - Support for Scala 2.13 and 2.11
+* Move Scanner to own module that depends on cats/shapeless
 * Remove implicit options from all APIs
 
 ## v3.2.0
 * [Rename](https://github.com/pathikrit/better-files/commit/ec34a6f843fec941b51bdddafc2e07e5bc0e1cbb) PosixFilePermissions.OTHERS* APIs
+* [Issue #186](https://github.com/pathikrit/better-files/issues/186): Splitter based Scanner
 * [Issue #173](https://github.com/pathikrit/better-files/issues/173): Better ARM handling of fatal errors
 * [Issue #182](https://github.com/pathikrit/better-files/issues/182): Move and Copy *into* directory utils
+* [Issue #189](https://github.com/pathikrit/better-files/issues/189): Util to read String from an InputStream
+* [Issue #187](https://github.com/pathikrit/better-files/issues/187): Readers for `java.time.*` and `java.sql.*`
 * [Restore File.usingTemp](https://github.com/pathikrit/better-files/commit/35184a642245db3d1e41fc02c7bfbec0b19a43bb) first introduced in [7c60ca](https://github.com/pathikrit/better-files/commit/d3522e8da63b55c7d3fa14cc9b0b76acd57c60ca)
 * [Fix](https://github.com/pathikrit/better-files/pull/184) bug in appendBytes
 

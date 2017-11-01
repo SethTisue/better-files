@@ -55,18 +55,29 @@ trait Implicits {
   }
 
   implicit class InputStreamOps(in: InputStream) {
-    def pipeTo(out: OutputStream, bufferSize: Int = defaultBufferSize): Unit =
+    def pipeTo(out: OutputStream, bufferSize: Int = defaultBufferSize): out.type = {
       pipeTo(out, Array.ofDim[Byte](bufferSize))
+      out
+    }
 
     /**
       * Pipe an input stream to an output stream using a byte buffer
       */
-    @tailrec final def pipeTo(out: OutputStream, buffer: Array[Byte]): Unit = {
+    @tailrec final def pipeTo(out: OutputStream, buffer: Array[Byte]): out.type = {
       val n = in.read(buffer)
       if (n > 0) {
         out.write(buffer, 0, n)
         pipeTo(out, buffer)
+      } else {
+        out
       }
+    }
+
+    def asString(closeStream: Boolean = true, bufferSize: Int = defaultBufferSize)(implicit charset: Charset = defaultCharset): String = {
+      val result = new ByteArrayOutputStream(bufferSize).autoClosed
+        .map(pipeTo(_, bufferSize = bufferSize).toString(charset.displayName()))
+      if (closeStream) in.close()
+      result
     }
 
     def buffered: BufferedInputStream =
@@ -129,11 +140,8 @@ trait Implicits {
     def chars: Iterator[Char] =
       reader.autoClosed.flatMap(res => eofReader(res.read()).map(_.toChar))
 
-    private[files] def tokenizers(implicit config: Scanner.Config = Scanner.Config.default) =
-      reader.lines().toAutoClosedIterator.map(line => new StringTokenizer(line, config.delimiter, config.includeDelimiters))
-
-    def tokens(implicit config: Scanner.Config = Scanner.Config.default): Iterator[String] =
-      tokenizers(config).flatMap(tokenizerToIterator)
+    def tokens(splitter: StringSplitter = StringSplitter.default): Iterator[String] =
+      reader.lines().toAutoClosedIterator.flatMap(splitter.split)
   }
 
   implicit class WriterOps(writer: Writer) {
