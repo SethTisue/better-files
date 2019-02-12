@@ -3,25 +3,13 @@ val repo     = "better-files"
 
 lazy val commonSettings = Seq(
   organization := s"com.github.$username",
-  scalaVersion := crossScalaVersions.value.find(_.startsWith("2.12")).get,
+  scalaVersion := "2.12.9-bin-b73bbd1",
   crossScalaVersions := Seq("2.11.12", "2.12.8", "2.13.0-M5"),
   crossVersion := CrossVersion.binary,
   scalacOptions := myScalacOptions(scalaVersion.value, scalacOptions.value),
   scalacOptions in (Compile, doc) += "-groups",
   libraryDependencies += Dependencies.scalatest,
-  updateImpactOpenBrowser := false,
-  compile in Compile := (compile in Compile).dependsOn(formatAll).value,
-  test in Test := (test in Test).dependsOn(checkFormat).value,
-  formatAll := {
-    (scalafmt in Compile).value
-    (scalafmt in Test).value
-    (scalafmtSbt in Compile).value
-  },
-  checkFormat := {
-    (scalafmtCheck in Compile).value
-    (scalafmtCheck in Test).value
-    (scalafmtSbtCheck in Compile).value
-  }
+  updateImpactOpenBrowser := false
 )
 
 /** We use https://github.com/DavidGregory084/sbt-tpolecat but some of these are broken */
@@ -77,9 +65,6 @@ lazy val docSettings = Seq(
   git.remoteRepo := s"git@github.com:$username/$repo.git",
   envVars in ghpagesPushSite += ("SBT_GHPAGES_COMMIT_MESSAGE" -> s"Publishing Scaladoc [CI SKIP]")
 )
-
-lazy val formatAll   = taskKey[Unit]("Format all the source code which includes src, test, and build files")
-lazy val checkFormat = taskKey[Unit]("Check all the source code which includes src, test, and build files")
 
 import ReleaseTransformations._
 lazy val releaseSettings = Seq(
